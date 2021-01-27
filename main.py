@@ -7,11 +7,17 @@ cprint('Welcome to mine sweeper!\r\n=======================', 'blue')
 cprint('By Alex', 'blue')
 
 
+numofbombs = input('How many bombs do you want?')
+numofbombs = int(numofbombs)
+
+
+
+
 def clear():
     system('cls')
 
 
-def reset():
+def reset(numofbombs):
     print('''MAIN MENU\r\n=========\r\n\r\n-> for instructions type I\r\n-> to start playing type P''')
     choice = input('type here:').upper()
 
@@ -23,13 +29,13 @@ def reset():
 
     elif choice != 'P':
         clear()
-        reset()
+        reset(numofbombs)
 
     # The solution grid.
     b = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
          [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
          [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
-    for n in range(0, 10):
+    for n in range(0, numofbombs):
         place_bomb(b)
     for r in range(0, 9):
         for c in range(0, 9):
@@ -43,7 +49,7 @@ def reset():
          [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
     printBoard(k)
     starttime = time.time()
-    play(b, k, starttime)
+    play(b, k, starttime, numofbombs)
 
 
 def place_bomb(b):
@@ -116,7 +122,7 @@ def printBoard(k):
     print('  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝')
 
 
-def play(b, k, starttime):
+def play(b, k, starttime, numofbombs):
     c, r = choose(b, k, starttime)
     v = l(r, c, b)
     if v == '*':
@@ -126,7 +132,7 @@ def play(b, k, starttime):
         playagain = input('Play again? (Y/N): ').lower()
         if playagain == 'y':
             clear()
-            reset()
+            reset(numofbombs)
         else:
             quit()
     k[r][c] = v
@@ -138,17 +144,17 @@ def play(b, k, starttime):
         row = k[x]
         squaresLeft += row.count(' ')
         squaresLeft += row.count('⚐')
-    if squaresLeft == 10:
+    if squaresLeft == numofbombs:
         cprint('You win!', 'green')
         print('Time: ' + str(round(time.time() - starttime)) + 's')
         playAgain = input('Play again? (Y/N): ')
         playAgain = playAgain.lower()
         if playAgain == 'y':
             clear()
-            reset()
+            reset(numofbombs)
         else:
             quit()
-    play(b, k, starttime)
+    play(b, k, starttime, numofbombs)
 
 
 def choose(b, k, starttime):
@@ -216,7 +222,7 @@ def zeroProcedure(r, c, k, b):
         if 9 > c + 1: row[c + 1] = l(r + 1, c + 1, b)
 
 
-reset()
+reset(numofbombs)
 
 
 # This is a sample Python script.
