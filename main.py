@@ -3,14 +3,16 @@ import random, time, copy
 from termcolor import cprint
 from os import system
 
-cprint('Welcome to mine sweeper!\r\n=======================', 'blue')
-cprint('By Alex', 'blue')
 
-
-numofbombs = input('How many bombs do you want?')
-numofbombs = int(numofbombs)
-
-
+def get_num_of_bombs(numofbombs):
+    if numofbombs < 0 or numofbombs > 81:
+        numofbombs = input('Number of bombs must be between 0 and 81 \n How many bombs do you want?')
+        try:
+            numofbombs = int(numofbombs)
+        except ValueError:
+            numofbombs = -1
+        numofbombs = get_num_of_bombs(numofbombs)
+    return numofbombs
 
 
 def clear():
@@ -165,7 +167,7 @@ def choose(b, k, starttime):
         if len(chosen) == 3 and chosen[0] == 'm' and chosen[1] in letters and chosen[2] in numbers:
             c, r = (ord(chosen[1])) - 97, int(chosen[2])
             marker(r, c, k)
-            play(b, k, starttime)
+            play(b, k, starttime, numofbombs)
             break
         elif len(chosen) == 2 and chosen[0] in letters and chosen[1] in numbers:
             return (ord(chosen[0])) - 97, int(chosen[1])
@@ -221,6 +223,13 @@ def zeroProcedure(r, c, k, b):
         row[c] = l(r + 1, c, b)
         if 9 > c + 1: row[c + 1] = l(r + 1, c + 1, b)
 
+
+cprint('Welcome to mine sweeper!\r\n=======================', 'blue')
+cprint('By Alex', 'blue')
+
+# numofbombs = input('How many bombs do you want?')
+# numofbombs = int(numofbombs)
+numofbombs = get_num_of_bombs(-1)
 
 reset(numofbombs)
 
