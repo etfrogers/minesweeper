@@ -172,7 +172,8 @@ def choose(b, k, starttime):
         elif len(chosen) == 2 and chosen[0] in letters and chosen[1] in numbers:
             return (ord(chosen[0])) - 97, int(chosen[1])
         else:
-            choose(b, k, starttime)
+            return choose(b, k, starttime)
+
 
 
 def marker(r, c, k):
@@ -235,21 +236,13 @@ reset(numofbombs)
 
 
 # This is a sample Python script.
-
-
-
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-
-
 #def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    #print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-
-
+# Use a breakpoint in the code line below to debug your script.
+#print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
 # Press the green button in the gutter to run the script.
 #if __name__ == '__main__':
-    #print_hi('PyCharm')
-
+#print_hi('PyCharm')
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
