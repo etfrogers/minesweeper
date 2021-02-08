@@ -170,10 +170,16 @@ def choose(b, k, starttime):
             play(b, k, starttime, numofbombs)
             break
         elif len(chosen) == 2 and chosen[0] in letters and chosen[1] in numbers:
+            choose.n_invalid_guesses = 0
             return (ord(chosen[0])) - 97, int(chosen[1])
         else:
+            choose.n_invalid_guesses += 1
+            if choose.n_invalid_guesses == 10:
+                quit()
             return choose(b, k, starttime)
 
+
+choose.n_invalid_guesses = 0
 
 
 def marker(r, c, k):
