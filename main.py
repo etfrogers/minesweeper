@@ -7,6 +7,8 @@ from os import system
 def get_num_of_bombs(numofbombs):
     if numofbombs < 0 or numofbombs > 81:
         numofbombs = input('Number of bombs must be between 0 and 81 \n How many bombs do you want?')
+        if numofbombs == 'q':
+            quit()
         try:
             numofbombs = int(numofbombs)
         except ValueError:
@@ -22,12 +24,17 @@ def clear():
 def reset(numofbombs):
     print('''MAIN MENU\r\n=========\r\n\r\n-> for instructions type I\r\n-> to start playing type P''')
     choice = input('type here:').upper()
+    if choice == 'Q':
+        quit()
 
     if choice == 'I':
         clear()
 
         print(open('instructions.txt', 'r').read())
-        input('press [enter]when ready to play')
+        ready = input('press [enter]when ready to play').lower()
+        if ready == 'q':
+            quit()
+
 
     elif choice != 'P':
         clear()
@@ -164,6 +171,8 @@ def choose(b, k, starttime):
     numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8']
     while True:
         chosen = input('Choose a square (eg. E4) or place a marker (eg. mE4): ').lower()
+        if chosen == 'q':
+            quit()
         if len(chosen) == 3 and chosen[0] == 'm' and chosen[1] in letters and chosen[2] in numbers:
             c, r = (ord(chosen[1])) - 97, int(chosen[2])
             marker(r, c, k)
