@@ -4,17 +4,35 @@ from termcolor import cprint
 from os import system
 
 
-def get_num_of_bombs(numofbombs):
+def get_grid_size():
+    n_of_columns = input('How many columns do you want?')
+    n_of_rows = input('How many rows do you want?')
+    try:
+        n_of_columns = int(n_of_columns)
+    except ValueError:
+        n_of_columns = 0
+    try:
+        n_of_rows = int(n_of_rows)
+    except ValueError:
+        n_of_rows = 0
+    if n_of_rows < 1 or n_of_columns < 1:
+        return get_grid_size()
+    else:
+        return n_of_rows, n_of_columns
+
+
+def get_num_of_bombs():
+    numofbombs = input('Number of bombs must be between 0 and 81 \n How many bombs do you want?')
+    if numofbombs == 'q':
+        quit()
+    try:
+        numofbombs = int(numofbombs)
+    except ValueError:
+        numofbombs = -1
     if numofbombs < 0 or numofbombs > 81:
-        numofbombs = input('Number of bombs must be between 0 and 81 \n How many bombs do you want?')
-        if numofbombs == 'q':
-            quit()
-        try:
-            numofbombs = int(numofbombs)
-        except ValueError:
-            numofbombs = -1
-        numofbombs = get_num_of_bombs(numofbombs)
-    return numofbombs
+        return get_num_of_bombs()
+    else:
+        return numofbombs
 
 
 def clear():
@@ -26,10 +44,8 @@ def reset(numofbombs):
     choice = input('type here:').upper()
     if choice == 'Q':
         quit()
-
     if choice == 'I':
         clear()
-
         print(open('instructions.txt', 'r').read())
         ready = input('press [enter]when ready to play').lower()
         if ready == 'q':
@@ -243,21 +259,9 @@ def zeroProcedure(r, c, k, b):
 cprint('Welcome to mine sweeper!\r\n=======================', 'blue')
 cprint('By Alex', 'blue')
 
-# numofbombs = input('How many bombs do you want?')
-# numofbombs = int(numofbombs)
-numofbombs = get_num_of_bombs(-1)
-
+n_rows, n_cols = get_grid_size()
+numofbombs = get_num_of_bombs()
 reset(numofbombs)
 
 
-# This is a sample Python script.
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
-#def print_hi(name):
-# Use a breakpoint in the code line below to debug your script.
-#print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
-# Press the green button in the gutter to run the script.
-#if __name__ == '__main__':
-#print_hi('PyCharm')
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
 
