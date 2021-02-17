@@ -2,6 +2,7 @@
 import random, time, copy
 from termcolor import cprint
 from os import system
+from string import ascii_uppercase
 
 
 def get_grid_size():
@@ -15,28 +16,30 @@ def get_grid_size():
         n_of_rows = int(n_of_rows)
     except ValueError:
         n_of_rows = 0
-    if n_of_rows < 1 or n_of_columns < 1:
+    if n_of_rows < 1 or n_of_rows > 99 or n_of_columns < 1 or n_of_columns > 26:
         return get_grid_size()
     else:
         return n_of_rows, n_of_columns
 
 
 def get_num_of_bombs():
-    numofbombs = input('Number of bombs must be between 0 and 81 \n How many bombs do you want?')
+    grid_size = n_cols * n_rows
+    numofbombs = input('Number of bombs must be between 0 and ' + str(grid_size) + '\n How many bombs do you want?')
     if numofbombs == 'q':
         quit()
     try:
         numofbombs = int(numofbombs)
     except ValueError:
         numofbombs = -1
-    if numofbombs < 0 or numofbombs > 81:
+    if numofbombs < 0 or numofbombs > grid_size:
         return get_num_of_bombs()
     else:
         return numofbombs
 
 
 def clear():
-    system('cls')
+    pass
+    # system('cls')
 
 
 def reset(numofbombs):
@@ -50,36 +53,36 @@ def reset(numofbombs):
         ready = input('press [enter]when ready to play').lower()
         if ready == 'q':
             quit()
-
-
     elif choice != 'P':
         clear()
         reset(numofbombs)
 
     # The solution grid.
-    b = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
-         [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    # b = [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #      [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0],
+    #      [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]]
+    b = [[0] * n_cols] * n_rows
     for n in range(0, numofbombs):
         place_bomb(b)
-    for r in range(0, 9):
-        for c in range(0, 9):
+    for r in range(0, n_rows):
+        for c in range(0, n_cols):
             value = l(r, c, b)
             if value == '*':
                 updateValues(r, c, b)
-    k = [[' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
-         [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
+    k = [[' '] * n_cols] * n_rows
+         # , ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+         # [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+         # [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+         # [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+         # [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ']]
     printBoard(k)
     starttime = time.time()
     play(b, k, starttime, numofbombs)
 
 
 def place_bomb(b):
-    r = random.randint(0, 8)
-    c = random.randint(0, 8)
+    r = random.randint(0, n_rows-1)
+    c = random.randint(0, n_cols-1)
     currentrow = b[r]
     if not currentrow[c] == '*':
         currentrow[c] = '*'
@@ -98,7 +101,7 @@ def updateValues(rn, c, b):
         if not r[c] == '*':
             r[c] += 1
 
-        if 9 > c + 1:
+        if n_cols > c + 1:
             if not r[c + 1] == '*':
                 r[c + 1] += 1
 
@@ -109,12 +112,12 @@ def updateValues(rn, c, b):
         if not r[c - 1] == '*':
             r[c - 1] += 1
 
-    if 9 > c + 1:
+    if n_cols > c + 1:
         if not r[c + 1] == '*':
             r[c + 1] += 1
 
     # Row below.
-    if 9 > rn + 1:
+    if n_rows > rn + 1:
         r = b[rn + 1]
 
         if c - 1 > -1:
@@ -124,7 +127,7 @@ def updateValues(rn, c, b):
         if not r[c] == '*':
             r[c] += 1
 
-        if 9 > c + 1:
+        if n_cols > c + 1:
             if not r[c + 1] == '*':
                 r[c + 1] += 1
 
@@ -135,16 +138,21 @@ def l(r, c, b):
     return c
 
 
-def printBoard(k):
+def printBoard(k):   # , n_cols, n_rows):
     clear()
-    print('    A   B   C   D   E   F   G   H   I')
-    print('  ╔═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╦═══╗')
-    for r in range(0, 9):
-        print(r, '║', l(r, 0, k), '║', l(r, 1, k), '║', l(r, 2, k), '║', l(r, 3, k), '║', l(r, 4, k), '║', l(r, 5, k), '║',
-          l(r, 6, k), '║', l(r, 7, k), '║', l(r, 8, k), '║')
-    if not r == 8:
-        print('  ╠═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╬═══╣')
-    print('  ╚═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╩═══╝')
+    header = ascii_uppercase[0:n_cols]
+    print('     ' + '   '.join(header))
+    print('   ╔══'+'═╦══' * (n_cols-1)+'═╗')
+    for r in range(0, n_rows):
+        entries = [str(l(r, i, k)) for i in (range(n_cols))]
+        if r < 10:
+            spacing = ' '
+        else:
+            spacing = ''
+        print(spacing + str(r), '║', ' ║ '.join(entries), '║')
+        if not r == n_rows -1:
+            print('   ╠══'+'═╬══' * (n_cols-1)+'═╣')
+    print('   ╚══'+'═╩══' * (n_cols -1) +'═╝')
 
 
 def play(b, k, starttime, numofbombs):
@@ -165,7 +173,7 @@ def play(b, k, starttime, numofbombs):
         checkZeros(k, b, r, c)
     printBoard(k)
     squaresLeft = 0
-    for x in range(0, 9):
+    for x in range(0, n_rows):
         row = k[x]
         squaresLeft += row.count(' ')
         squaresLeft += row.count('⚐')
@@ -219,8 +227,8 @@ def checkZeros(k, b, r, c):
         return
     while True:
         oldGrid = copy.deepcopy(k)
-        for x in range(9):
-            for y in range(9):
+        for x in range(n_rows):
+            for y in range(n_cols):
                 if l(x, y, k) == 0:
                     zeroProcedure(x, y, k, b)
         if oldGrid == k:
@@ -234,26 +242,26 @@ def zeroProcedure(r, c, k, b):
         if c - 1 > -1:
             row[c - 1] = l(r - 1, c - 1, b)
         row[c] = l(r - 1, c, b)
-        if 9 > c + 1:
+        if n_cols > c + 1:
             row[c + 1] = l(r - 1, c + 1, b)
         row = k[r-1]
         if c-1 > -1:
             row[c-1] = l(r-1, c-1, b)
         row[c] = l(r-1, c, b)
-        if 9 > c+1:
+        if n_cols > c+1:
             row[c+1] = l(r-1, c+1, b)
     # Same row
     row = k[r]
     if c - 1 > -1:
         row[c - 1] = l(r, c - 1, b)
-    if 9 > c + 1:
+    if n_cols > c + 1:
         row[c + 1] = l(r, c + 1, b)
     # Row below
-    if 9 > r + 1:
+    if n_rows > r + 1:
         row = k[r + 1]
         if c - 1 > -1: row[c - 1] = l(r + 1, c - 1, b)
         row[c] = l(r + 1, c, b)
-        if 9 > c + 1: row[c + 1] = l(r + 1, c + 1, b)
+        if n_cols > c + 1: row[c + 1] = l(r + 1, c + 1, b)
 
 
 cprint('Welcome to mine sweeper!\r\n=======================', 'blue')
