@@ -2,7 +2,7 @@
 import copy
 import random
 import time
-from os import system
+# from os import system
 from string import ascii_uppercase
 
 from termcolor import cprint
@@ -13,6 +13,8 @@ N_COLS = N_ROWS = 0
 def get_grid_size():
     n_of_columns = input('-> How many columns do you want?')
     n_of_rows = input('-> How many rows do you want?')
+    if n_of_rows == 'q' or n_of_columns == 'q':
+        quit()
     n_of_columns = integer_or_negative(n_of_columns)
     n_of_rows = integer_or_negative(n_of_rows)
     if n_of_rows < 1 or n_of_rows > 100 or n_of_columns < 1 or n_of_columns > 26:
